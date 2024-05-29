@@ -10,8 +10,13 @@ import {queryRaffleAwardList, randomRaffle} from '@/apis'
 import {RaffleAwardVO} from '@/types/RaffleAwardVO';
 
 export function LuckyWheelPage() {
-    const queryParams = new URLSearchParams(window.location.search);
-    const strategyId = Number(queryParams.get('strategyId'));
+    const [strategyId, setStrategyId] = useState<number>();
+    // 完善代码
+    useEffect(() => {
+        const queryParams = new URLSearchParams(window.location.search);
+        const strategyIdFromQuery = Number(queryParams.get('strategyId'));
+        setStrategyId(strategyIdFromQuery);
+    }, []);
     const [prizes, setPrizes] = useState([{}])
     const myLucky = useRef()
 
@@ -34,7 +39,7 @@ export function LuckyWheelPage() {
         const result = await queryRaffleAwardList(strategyId);
         const {code, info, data} = await result.json();
         if (code != "0000") {
-            window.alert("获取抽奖奖品列表失败 code:" + code + " info:" + info)
+            window.alert("随机抽奖失败 code:" + code + " info:" + info)
             return;
         }
 
